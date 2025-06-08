@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Tally</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        /* CSS Variables for theming */
+        :root {
+            /* Light Mode */
+            --bg-color: #f0f2f5; /* Lighter background */
+            --text-color: #333;
+            --container-bg: #ffffff;
+            --primary-color: #007bff;
+            --primary-hover: #0056b3;
+            --accent-color: #28a745;
+            --shadow-color: rgba(0, 0, 0, 0.15);
+            --button-text-color: white;
+            --toggle-bg: #007bff;
+            --toggle-hover: #0056b3;
+            --circle-bg: #e2e6ea; /* Neutral light gray */
+            --circle-border: #c3c7cb;
+            --feedback-color: #1a7e32; /* Slightly darker accent for feedback */
+            --reset-button-bg: #dc3545; /* Red for reset */
+            --reset-button-hover: #c82333;
+
+            /* Modal specific colors */
+            --modal-bg: #ffffff;
+            --modal-text: #333;
+            --modal-shadow: rgba(0, 0, 0, 0.3);
+            --modal-button-confirm-bg: #28a745; /* Green for "Yes" */
+            --modal-button-confirm-hover: #218838;
+            --modal-button-cancel-bg: #6c757d; /* Gray for "No" */
+            --modal-button-cancel-hover: #5a6268;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            --bg-color: #1a1a2e; /* Darker, slightly blue background */
+            --text-color: #e0e0e0;
+            --container-bg: #2b2b4d; /* Darker container */
+            --primary-color: #7a82da; /* Lighter blue/purple */
+            --primary-hover: #5c62b2;
+            --accent-color: #6edc86;
+            --shadow-color: rgba(0, 0, 0, 0.4);
+            --button-text-color: #e0e0e0; /* Lighter text for dark buttons */
+            --toggle-bg: #7a82da;
+            --toggle-hover: #5c62b2;
+            --circle-bg: #3a3a5e;
+            --circle-border: #52528c;
+            --feedback-color: #4CAF50; /* Brighter accent for feedback */
+            --reset-button-bg: #e66b72; /* Lighter red for reset */
+            --reset-button-hover: #d25057;
+
+            /* Modal specific colors for dark mode */
+            --modal-bg: #3a3a5e;
+            --modal-text: #e0e0e0;
+            --modal-shadow: rgba(0, 0, 0, 0.6);
+            --modal-button-confirm-bg: #6edc86;
+            --modal-button-confirm-hover: #5cb372;
+            --modal-button-cancel-bg: #6c757d;
+            --modal-button-cancel-hover: #5a6268;
+        }
+
+        /* Base Styles */
+        body {
+            font-family: 'Roboto', sans-serif; /* Use Roboto font */
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Center content vertically in the viewport */
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.4s ease, color 0.4s ease; /* Smoother transitions */
+            padding: 20px; /* Add padding to body for small screens */
+            box-sizing: border-box; /* Include padding in element's total width and height */
+        }
+
+        .container {
+            background-color: var(--container-bg);
+            padding: 40px 60px; /* More padding */
+            border-radius: 15px; /* Softer corners */
+            box-shadow: 0 10px 25px var(--shadow-color); /* More prominent shadow */
+            text-align: center;
+            transition: background-color 0.4s ease, box-shadow 0.4s ease;
+            max-width: 90%; /* Responsive width */
+            width: 400px; /* Max width for larger screens */
+            box-sizing: border-box;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            font-size: 2.2em;
+            transition: color 0.4s ease;
+        }
+
+        /* Click Count Circle */
+        #clickCount {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 180px; /* Slightly larger circle */
+            height: 180px;
+            border-radius: 50%;
+            background-color: var(--circle-bg);
+            border: 6px solid var(--circle-border); /* Thicker border */
+            font-size: 4em; /* Even larger font */
+            font-weight: 700; /* Bolder Roboto font */
+            color: var(--accent-color);
+            margin: 35px auto;
+            transition: background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease, transform 0.1s ease; /* Added transform for bounce */
+            user-select: none; /* Prevent text selection */
+        }
+
+        #clickCount.bouncing {
+            transform: scale(1.1); /* Subtle bounce effect */
+        }
+
+
+        /* General Button Styles - applies to both click and reset unless overridden */
+        button {
+            color: var(--button-text-color);
+            padding: 15px 35px; /* Default padding for buttons */
+            font-size: 1.2em; /* Default font size for buttons */
+            border: none;
+            border-radius: 8px; /* Slightly more rounded */
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.2s ease;
+            margin: 10px 5px; /* Default margin around buttons */
+            font-weight: 700;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: inline-block; /* Ensure buttons sit next to each other */
+            vertical-align: top; /* Align their tops if heights vary slightly */
+        }
+
+        /* Click Button Specific Styles */
+        #clickButton {
+            background-color: var(--primary-color);
+        }
+
+        #clickButton:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px); /* Slight lift effect */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        #clickButton:active {
+            transform: translateY(0); /* Press down effect */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            background-color: var(--feedback-color, #004085); /* Provide immediate feedback */
+        }
+
+        /* Reset Button Specific Styles - making it half length and further down */
+        #resetButton {
+            background-color: var(--reset-button-bg);
+            padding: 8px 18px; /* Maintain smaller padding */
+            font-size: 0.9em; /* Maintain smaller font size */
+            width: 50%; /* Half the width of its container, roughly half of click button */
+            margin-top: 30px; /* Pushed down even further */
+            display: block; /* Make it a block element to go on a new line */
+            margin-left: auto; /* Center it horizontally */
+            margin-right: auto; /* Center it horizontally */
+        }
+
+        #resetButton:hover {
+            background-color: var(--reset-button-hover);
+            transform: translateY(-2px); /* Maintain hover effect */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        #resetButton:active {
+            transform: translateY(0); /* Maintain active effect */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+
+        /* Theme Toggle Button Specific Styles - FONT AWESOME */
+        #themeToggle {
+            background-color: var(--toggle-bg);
+            padding: 5px 8px;
+            border-radius: 50px;
+            box-shadow: 0 2px 5px var(--shadow-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 28px;
+            overflow: hidden; /* Crucial for hiding parts of the icon */
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            z-index: 100;
+            border: 2px solid var(--toggle-bg);
+            color: var(--button-text-color); /* Set color for Font Awesome icons */
+        }
+
+        #themeToggle:hover {
+            background-color: var(--toggle-hover);
+            border-color: var(--toggle-hover);
+        }
+
+        #themeToggle:active {
+             background-color: var(--feedback-color);
+             border-color: var(--feedback-color);
+        }
+
+        #themeToggle .icon {
+            position: absolute;
+            font-size: 1.4em; /* Size for Font Awesome icons */
+            line-height: 1; /* Ensure no extra line height pushes icons around */
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            white-space: nowrap; /* Prevent icon from wrapping */
+        }
+
+        #themeToggle .sun-icon {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        body.dark-mode #themeToggle .sun-icon {
+            opacity: 0;
+            transform: translateX(-40px); /* Pushed further left to ensure hiding */
+        }
+
+        #themeToggle .moon-icon {
+            opacity: 0;
+            transform: translateX(40px); /* Pushed further right to ensure hiding */
+        }
+
+        body.dark-mode #themeToggle .moon-icon {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* --- Custom Confirmation Modal Styles --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000; /* Ensure it's on top of other content */
+            opacity: 0; /* Hidden by default */
+            visibility: hidden; /* Hidden by default */
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: var(--modal-bg);
+            color: var(--modal-text);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px var(--modal-shadow);
+            text-align: center;
+            max-width: 350px; /* Limit modal width */
+            width: 90%; /* Responsive width */
+            transform: translateY(-20px); /* Start slightly above center */
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.show .modal-content {
+            transform: translateY(0); /* Slide into center */
+        }
+
+        .modal-content p {
+            margin-bottom: 25px;
+            font-size: 1.1em;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px; /* Space between buttons */
+        }
+
+        .modal-buttons button {
+            padding: 10px 25px;
+            font-size: 1em;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            width: 100px; /* Fixed width for modal buttons */
+        }
+
+        .modal-buttons button.confirm {
+            background-color: var(--modal-button-confirm-bg);
+            color: white;
+        }
+
+        .modal-buttons button.confirm:hover {
+            background-color: var(--modal-button-confirm-hover);
+            transform: translateY(-1px);
+        }
+
+        .modal-buttons button.cancel {
+            background-color: var(--modal-button-cancel-bg);
+            color: white;
+        }
+
+        .modal-buttons button.cancel:hover {
+            background-color: var(--modal-button-cancel-hover);
+            transform: translateY(-1px);
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 30px;
+                width: 100%; /* Full width on small screens */
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            #clickCount {
+                width: 150px;
+                height: 150px;
+                font-size: 3.5em;
+            }
+
+            /* Adjustments for buttons on small screens */
+            #clickButton {
+                padding: 10px 20px;
+                font-size: 1em;
+                width: calc(100% - 20px); /* Full width on small screens */
+                margin: 5px auto;
+                display: block; /* Stack buttons vertically */
+            }
+
+            /* Ensure reset button is relatively smaller and below on small screens too */
+            #resetButton {
+                padding: 6px 15px; /* Even smaller padding on mobile */
+                font-size: 0.8em; /* Even smaller font on mobile */
+                width: 60%; /* Slightly wider on mobile for better tap target */
+                margin-top: 20px; /* Pushed down even further on mobile */
+            }
+
+            #themeToggle {
+                top: 15px;
+                right: 15px;
+                width: 40px;
+                height: 25px;
+            }
+
+            #themeToggle .icon {
+                font-size: 1.2em; /* Smaller icons on mobile */
+            }
+
+            body.dark-mode #themeToggle .sun-icon {
+                transform: translateX(-30px);
+            }
+
+            #themeToggle .moon-icon {
+                transform: translateX(30px);
+            }
+
+            /* Modal adjustments for small screens */
+            .modal-content {
+                padding: 20px;
+            }
+            .modal-buttons button {
+                width: 90px; /* Slightly smaller width for mobile modal buttons */
+                padding: 8px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button id="themeToggle" aria-label="Toggle dark mode">
+        <i class="icon sun-icon fas fa-sun" role="img" aria-label="Sun icon for light mode"></i>
+        <i class="icon moon-icon fas fa-moon" role="img" aria-label="Moon icon for dark mode"></i>
+    </button>
+
+    <div class="container">
+        <h1>Digital Tally</h1>
+        <span id="clickCount" role="status" aria-live="polite">0</span>
+        <button id="clickButton">Click Me!</button>
+        <button id="resetButton">Reset</button>
+    </div>
+
+    <div id="resetConfirmModal" class="modal-overlay">
+        <div class="modal-content">
+            <p>Are you sure you want to reset the count to zero?</p>
+            <div class="modal-buttons">
+                <button id="confirmYes" class="confirm">Yes</button>
+                <button id="confirmNo" class="cancel">No</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize the click count
+        let count = 0;
+
+        // Get references to the HTML elements
+        const clickCountDisplay = document.getElementById('clickCount');
+        const clickButton = document.getElementById('clickButton');
+        const resetButton = document.getElementById('resetButton');
+        const themeToggleButton = document.getElementById('themeToggle');
+        const body = document.body;
+
+        // Get references to the new modal elements
+        const resetConfirmModal = document.getElementById('resetConfirmModal');
+        const confirmYesButton = document.getElementById('confirmYes');
+        const confirmNoButton = document.getElementById('confirmNo');
+
+
+        // --- Click Counter Logic ---
+        clickButton.addEventListener('click', () => {
+            count++;
+            clickCountDisplay.textContent = count;
+
+            // Add a temporary class for the bounce effect
+            clickCountDisplay.classList.add('bouncing');
+            // Remove the class after a short delay to reset for next click
+            setTimeout(() => {
+                clickCountDisplay.classList.remove('bouncing');
+            }, 100); // Duration of the bounce
+        });
+
+        // --- Reset Button Logic (using custom modal) ---
+        resetButton.addEventListener('click', () => {
+            resetConfirmModal.classList.add('show'); // Show the custom modal
+        });
+
+        confirmYesButton.addEventListener('click', () => {
+            count = 0; // Reset the count
+            clickCountDisplay.textContent = count; // Update the display
+            resetConfirmModal.classList.remove('show'); // Hide the modal
+        });
+
+        confirmNoButton.addEventListener('click', () => {
+            resetConfirmModal.classList.remove('show'); // Just hide the modal
+        });
+
+
+        // --- Dark Mode Logic ---
+
+        // Function to set the theme
+        function setTheme(isDarkMode) {
+            if (isDarkMode) {
+                body.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark'); // Save preference
+            } else {
+                body.classList.remove('dark-mode');
+                localStorage.setItem('theme', 'light'); // Save preference
+            }
+        }
+
+        // Check for saved theme preference on page load
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            setTheme(true); // Apply dark mode if saved
+        } else {
+            setTheme(false); // Apply light mode by default or if 'light' is saved
+        }
+
+        // Event listener for the theme toggle button
+        themeToggleButton.addEventListener('click', () => {
+            const isDarkModeNow = body.classList.toggle('dark-mode');
+            setTheme(isDarkModeNow); // Call setTheme to update localStorage
+        });
+    </script>
+</body>
+</html>
