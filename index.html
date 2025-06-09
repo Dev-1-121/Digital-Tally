@@ -503,25 +503,18 @@
         <source src="click1.ogg" type="audio/ogg">
         Your browser does not support the audio element or the provided audio formats.
     </audio>
-    <audio id="clickSound2" preload="auto">
-        <source src="click2.mp3" type="audio/mpeg">
-        <source src="click2.ogg" type="audio/ogg">
-        Your browser does not support the audio element or the provided audio formats.
-    </audio>
-    <audio id="clickSound3" preload="auto">
-        <source src="click3.mp3" type="audio/mpeg">
-        <source src="click3.ogg" type="audio/ogg">
-        Your browser does not support the audio element or the provided audio formats.
-    </audio>
 
 
     <script>
         // Using an Immediately Invoked Function Expression (IIFE)
         // This creates a private scope for all variables and functions, preventing global pollution.
         (function() {
+            // --- Constants / Configuration ---
+            const LOCAL_STORAGE_COUNT_KEY = 'clickCount';
+            const LOCAL_STORAGE_THEME_KEY = 'theme';
+            const DEFAULT_SOUND_VOLUME = 0.6; // Volume from 0.0 to 1.0
+
             // --- Cache DOM Elements ---
-            // Fetching elements once at the start improves performance and code clarity.
-            // Explicit checks are added during event listener attachment in initializeApp.
             const clickCountDisplay = document.getElementById('clickCount');
             const clickButton = document.getElementById('clickButton');
             const resetButton = document.getElementById('resetButton');
@@ -534,25 +527,30 @@
             const autoplayMessage = document.getElementById('autoplayMessage');
 
             // --- Audio Setup ---
-            // Store references to all click sound elements in an array
-            const clickSoundElements = [
-                document.getElementById('clickSound1'),
-                document.getElementById('clickSound2'),
-                document.getElementById('clickSound3')
-            ].filter(el => el instanceof HTMLAudioElement); // Filter out nulls AND ensure it's an audio element
+            const clickSoundElement = document.getElementById('clickSound1');
+            let isSoundReady = false; // Flag to track if sound is ready to play
 
-            // Set default volume for all found sound elements
-            clickSoundElements.forEach(soundElement => {
-                soundElement.volume = 0.6; // Adjust as needed (0.0 to 1.0)
-            });
+            if (clickSoundElement instanceof HTMLAudioElement) {
+                clickSoundElement.volume = DEFAULT_SOUND_VOLUME;
 
-            if (clickSoundElements.length === 0) {
-                console.error("No valid audio elements (clickSound1, clickSound2, clickSound3) found. Sound effects will not play. Please check your HTML and ensure audio files are correctly placed.");
+                // Listen for 'canplaythrough' event to ensure sound is fully loaded
+                // This is more reliable than just 'preload="auto"' for knowing when it's truly ready
+                clickSoundElement.addEventListener('canplaythrough', () => {
+                    isSoundReady = true;
+                    console.log("clickSound1 is ready to play.");
+                }, { once: true }); // Use { once: true } to ensure this listener fires only once
+
+                // Handle error if the browser truly can't load the file
+                clickSoundElement.addEventListener('error', (e) => {
+                    console.error("Error loading clickSound1:", e);
+                    showTemporaryMessage("Sound file failed to load. Check console for details (e.g., click1.mp3/ogg).");
+                    isSoundReady = false; // Mark as not ready if an error occurs
+                });
+            } else {
+                console.error("Audio element with ID 'clickSound1' not found or is not an HTMLAudioElement. Sound effects will not play.");
             }
 
-
             // --- State Variables ---
-            // Centralized state helps manage data flow.
             let count = 0; // Initialize with 0, will be loaded from localStorage
             let messageTimeoutId; // To manage the autoplay message display timeout
 
@@ -560,7 +558,6 @@
 
             /**
              * Safely retrieves a value from localStorage.
-             * Wraps localStorage.getItem in a try-catch for robustness against security/quota errors.
              * @param {string} key - The key of the item to retrieve.
              * @param {any} defaultValue - The value to return if the key is not found or an error occurs.
              * @returns {string|any} The retrieved value or the default value.
@@ -568,17 +565,15 @@
             function getFromLocalStorage(key, defaultValue) {
                 try {
                     const storedValue = localStorage.getItem(key);
-                    // Return stored value if it exists, otherwise the default.
                     return storedValue !== null ? storedValue : defaultValue;
                 } catch (error) {
                     console.error(`Error reading from localStorage for key "${key}":`, error);
-                    return defaultValue; // Return default on error
+                    return defaultValue;
                 }
             }
 
             /**
              * Safely stores a value in localStorage.
-             * Wraps localStorage.setItem in a try-catch for robustness against security/quota errors.
              * @param {string} key - The key of the item to store.
              * @param {any} value - The value to store.
              */
@@ -587,7 +582,6 @@
                     localStorage.setItem(key, value);
                 } catch (error) {
                     console.error(`Error writing to localStorage for key "${key}":`, error);
-                    // Optionally, provide user feedback here if saving is critical.
                 }
             }
 
@@ -600,19 +594,17 @@
                 if (clickCountDisplay) {
                     clickCountDisplay.textContent = count;
                 }
-                saveToLocalStorage('clickCount', count);
+                saveToLocalStorage(LOCAL_STORAGE_COUNT_KEY, count);
             }
 
             /**
              * Applies a subtle bounce animation to the click count display.
-             * Uses requestAnimationFrame for optimal browser performance.
              */
             function animateClickCount() {
-                if (!clickCountDisplay) return; // Guard clause: Exit if element not found
+                if (!clickCountDisplay) return;
 
                 clickCountDisplay.classList.remove('bouncing');
-                // Force reflow to restart animation (by triggering a read of an offset property)
-                void clickCountDisplay.offsetWidth; // This line forces reflow
+                void clickCountDisplay.offsetWidth; // Force reflow to restart animation
                 requestAnimationFrame(() => {
                     clickCountDisplay.classList.add('bouncing');
                 });
@@ -624,12 +616,11 @@
              * @param {number} [duration=3000] - Duration in milliseconds before hiding the message.
              */
             function showTemporaryMessage(message, duration = 3000) {
-                if (!autoplayMessage) return; // Guard clause
+                if (!autoplayMessage) return;
 
                 autoplayMessage.textContent = message;
                 autoplayMessage.classList.add('show');
 
-                // Clear any previous timeout to prevent message flickering
                 clearTimeout(messageTimeoutId);
                 messageTimeoutId = setTimeout(() => {
                     autoplayMessage.classList.remove('show');
@@ -637,65 +628,54 @@
             }
 
             /**
-             * Randomly selects and plays one of the available click sound elements.
-             * Handles browser autoplay policy errors and potential loading issues.
+             * Plays the main click sound effect.
+             * Ensures sound plays on every click by resetting and playing.
              */
-            function playRandomClickSound() {
-                if (clickSoundElements.length === 0) {
-                    console.warn("No click sound elements available to play. Skipping sound playback.");
+            function playSoundEffect() {
+                // Check if the audio element exists and is ready to play
+                if (!clickSoundElement || !isSoundReady) {
+                    // This warning might appear if sound file not found or not fully loaded
+                    console.warn("Sound element not found or not ready. Skipping playback.");
                     return;
                 }
 
-                // Select a random sound element
-                const randomIndex = Math.floor(Math.random() * clickSoundElements.length);
-                const soundToPlay = clickSoundElements[randomIndex];
+                // IMPORTANT for playing sound on every rapid click:
+                // 1. Pause any currently playing instance of this sound.
+                // 2. Reset the playback position to the beginning.
+                clickSoundElement.pause();
+                clickSoundElement.currentTime = 0;
 
-                // Ensure the selected sound element is valid and ready
-                if (!soundToPlay || soundToPlay.readyState < 2) { // readyState < 2 means not enough data for playback
-                    console.warn(`Sound element at index ${randomIndex} is not ready (readyState: ${soundToPlay ? soundToPlay.readyState : 'N/A'}). Skipping playback.`);
-                    showTemporaryMessage("Sound not ready. Check file paths and formats!");
-                    return;
-                }
-
-                // Stop and reset the chosen sound if it's currently playing to allow overlapping
-                // or very rapid successive plays.
-                soundToPlay.pause();
-                soundToPlay.currentTime = 0;
-
-                // Play the sound and catch any potential errors (e.g., autoplay blocked)
-                soundToPlay.play().catch(error => {
-                    // This catch block handles Promises rejected due to various issues.
-                    // Common errors include NotAllowedError (autoplay policy) or DOMException.
+                // Play the sound and catch any potential errors (e.g., browser autoplay policy)
+                clickSoundElement.play().catch(error => {
                     console.warn("Error playing sound:", error.message, error.name);
 
                     if (error.name === 'NotAllowedError') {
-                        // This typically means the user hasn't interacted with the page enough
-                        // for autoplay to be permitted. A simple click might not always be enough.
+                        // This often means the user hasn't interacted with the page enough for autoplay
                         showTemporaryMessage("Browser blocked sound. Click again or interact more!");
-                    } else if (error.name === 'NotSupportedError' || error.name === 'NetworkError') {
-                        // File not found, corrupted, or unsupported format.
-                        showTemporaryMessage("Sound file issue. Check console. (e.g., clickX.mp3/ogg files)");
-                    } else {
-                        // Other unexpected errors
-                        showTemporaryMessage("Sound playback failed. Check console.");
+                    } else if (error.name === 'NotSupportedError') {
+                        // Sound format might not be supported by the browser, or file is corrupted.
+                        showTemporaryMessage("Sound format not supported or file corrupted. Check console.");
+                    } else if (error.name !== 'AbortError') {
+                        // AbortError can happen on rapid clicks as previous play attempts are cancelled,
+                        // and usually doesn't need a message. Other errors should be shown.
+                        showTemporaryMessage("Sound playback failed. Check console for details.");
                     }
                 });
             }
-
 
             /**
              * Sets the body's theme class and saves the preference to localStorage.
              * @param {boolean} isDarkMode - True to set dark mode, false for light mode.
              */
             function setTheme(isDarkMode) {
-                if (!body) return; // Guard clause
+                if (!body) return;
 
                 if (isDarkMode) {
                     body.classList.add('dark-mode');
-                    saveToLocalStorage('theme', 'dark');
+                    saveToLocalStorage(LOCAL_STORAGE_THEME_KEY, 'dark');
                 } else {
                     body.classList.remove('dark-mode');
-                    saveToLocalStorage('theme', 'light');
+                    saveToLocalStorage(LOCAL_STORAGE_THEME_KEY, 'light');
                 }
             }
 
@@ -718,12 +698,10 @@
             }
 
             // --- Event Handlers ---
-            // Named functions for event handlers improve readability and reusability.
-
             function handleButtonClick() {
                 updateClickCount(count + 1);
                 animateClickCount();
-                playRandomClickSound(); // Call the new random sound function
+                playSoundEffect(); // Call the sound function on every click
             }
 
             function handleResetRequest() {
@@ -731,7 +709,7 @@
             }
 
             function handleResetConfirm() {
-                updateClickCount(0); // Reset count to 0
+                updateClickCount(0);
                 hideResetModal();
             }
 
@@ -741,7 +719,6 @@
 
             function handleThemeToggle() {
                 if (body) {
-                    // Toggle the 'dark-mode' class and set theme based on its new state
                     const isDarkModeNow = body.classList.toggle('dark-mode');
                     setTheme(isDarkModeNow);
                 }
@@ -751,28 +728,24 @@
 
             /**
              * Initializes the application: loads saved state, sets up event listeners.
-             * This function centralizes all startup logic.
              */
             function initializeApp() {
                 // 1. Load initial count from localStorage
-                // parseInt is used to ensure the retrieved value is treated as a number.
-                count = parseInt(getFromLocalStorage('clickCount', 0));
+                count = parseInt(getFromLocalStorage(LOCAL_STORAGE_COUNT_KEY, 0));
                 if (clickCountDisplay) {
                     clickCountDisplay.textContent = count;
                 }
 
                 // 2. Load initial theme preference
-                const savedTheme = getFromLocalStorage('theme', 'light');
+                const savedTheme = getFromLocalStorage(LOCAL_STORAGE_THEME_KEY, 'light');
                 setTheme(savedTheme === 'dark');
 
-                // 3. Add loaded class for container animation (if container element exists)
+                // 3. Add loaded class for container animation
                 if (container) {
                     container.classList.add('loaded');
                 }
 
                 // 4. Attach Event Listeners
-                // Only attach listeners if the corresponding DOM element was successfully found.
-                // This makes the script more resilient to missing HTML elements.
                 if (clickButton) {
                     clickButton.addEventListener('click', handleButtonClick);
                 } else {
@@ -804,7 +777,7 @@
                 }
             }
 
-            // Ensure the DOM is fully loaded before trying to access elements
+            // Ensure the DOM is fully loaded before trying to access elements and initialize
             document.addEventListener('DOMContentLoaded', initializeApp);
 
         })(); // End of IIFE
