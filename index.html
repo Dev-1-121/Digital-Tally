@@ -456,26 +456,74 @@
         </div>
     </div>
 
+    <audio id="clickSound" preload="auto">
+        <source src="click.mp3" type="audio/mpeg">
+        <source src="click.ogg" type="audio/ogg">
+        <source src="click.wav" type="audio/wav">
+        Your browser does not support the audio element.
+    </audio>
+
     <script>
         // Use an IIFE (Immediately Invoked Function Expression) for better encapsulation
         // This helps avoid polluting the global scope and organizes the code.
         (function() {
             // --- DOM Elements ---
+            // It's good practice to get references to all elements once at the start.
+            // Add checks to ensure elements exist to prevent errors if IDs are changed/missing.
             const clickCountDisplay = document.getElementById('clickCount');
             const clickButton = document.getElementById('clickButton');
             const resetButton = document.getElementById('resetButton');
             const themeToggleButton = document.getElementById('themeToggle');
             const body = document.body;
-            const container = document.querySelector('.container'); // Get the container for its entry animation
+            const container = document.querySelector('.container'); // Using querySelector here
             const resetConfirmModal = document.getElementById('resetConfirmModal');
             const confirmYesButton = document.getElementById('confirmYes');
             const confirmNoButton = document.getElementById('confirmNo');
 
+            // --- Audio Elements ---
+            const clickSoundElement = document.getElementById('clickSound');
+            if (clickSoundElement) { // Check if the audio element exists
+                clickSoundElement.volume = 0.6; // Adjust as needed (0.0 to 1.0)
+            } else {
+                console.warn("Audio element with ID 'clickSound' not found. Sound effects will not play.");
+            }
+
             // --- State Variables ---
-            // Initialize count by trying to load from localStorage, defaulting to 0
-            let count = parseInt(localStorage.getItem('clickCount')) || 0;
+            let count = 0; // Initialize with 0, will be updated from localStorage
 
             // --- Utility Functions ---
+
+            /**
+             * Safely retrieves a value from localStorage.
+             * @param {string} key - The key to retrieve.
+             * @param {any} defaultValue - The value to return if key is not found or an error occurs.
+             * @returns {any} The retrieved value or defaultValue.
+             */
+            function getFromLocalStorage(key, defaultValue) {
+                try {
+                    const storedValue = localStorage.getItem(key);
+                    return storedValue !== null ? storedValue : defaultValue;
+                } catch (e) {
+                    console.error(`Error reading from localStorage for key "${key}":`, e);
+                    // Optionally, show a user-friendly message, e.g., "Could not load saved data."
+                    return defaultValue;
+                }
+            }
+
+            /**
+             * Safely sets a value in localStorage.
+             * @param {string} key - The key to set.
+             * @param {any} value - The value to store.
+             */
+            function saveToLocalStorage(key, value) {
+                try {
+                    localStorage.setItem(key, value);
+                } catch (e) {
+                    console.error(`Error writing to localStorage for key "${key}":`, e);
+                    // This often catches QuotaExceededError or SecurityError
+                    // Optionally, inform the user: "Could not save settings."
+                }
+            }
 
             /**
              * Updates the displayed click count and saves it to localStorage.
@@ -483,20 +531,39 @@
              */
             function updateClickCount(newCount) {
                 count = newCount;
-                clickCountDisplay.textContent = count;
-                localStorage.setItem('clickCount', count);
+                if (clickCountDisplay) { // Ensure element exists before updating
+                    clickCountDisplay.textContent = count;
+                }
+                saveToLocalStorage('clickCount', count); // Use safe localStorage function
             }
 
             /**
              * Applies a bounce animation to the click count display.
              */
             function animateClickCount() {
-                // Ensure animation is re-triggered on every click by removing and re-adding the class
-                clickCountDisplay.classList.remove('bouncing');
-                // Use requestAnimationFrame for smooth re-application
-                requestAnimationFrame(() => {
-                    clickCountDisplay.classList.add('bouncing');
-                });
+                if (clickCountDisplay) { // Ensure element exists
+                    clickCountDisplay.classList.remove('bouncing');
+                    // Use requestAnimationFrame for smoother animation triggering
+                    requestAnimationFrame(() => {
+                        clickCountDisplay.classList.add('bouncing');
+                    });
+                }
+            }
+
+            /**
+             * Plays the click sound effect.
+             */
+            function playClickSound() {
+                if (clickSoundElement) { // Ensure element exists
+                    clickSoundElement.currentTime = 0; // Reset to start for rapid clicks
+                    clickSoundElement.play().catch(e => {
+                        // This catch block handles cases where play() fails (e.g., NotAllowedError due to autoplay policy)
+                        // Or NotSupportedError if all <source> formats fail, or NetworkError if file is not found.
+                        console.warn("Error playing sound:", e.message);
+                        // For a better user experience, you might show a small, temporary message like
+                        // "Sound blocked by browser. Please interact with the page." if it's a NotAllowedError.
+                    });
+                }
             }
 
             /**
@@ -504,12 +571,14 @@
              * @param {boolean} isDarkMode - True for dark mode, false for light mode.
              */
             function setTheme(isDarkMode) {
-                if (isDarkMode) {
-                    body.classList.add('dark-mode');
-                    localStorage.setItem('theme', 'dark');
-                } else {
-                    body.classList.remove('dark-mode');
-                    localStorage.setItem('theme', 'light');
+                if (body) { // Ensure body element exists
+                    if (isDarkMode) {
+                        body.classList.add('dark-mode');
+                        saveToLocalStorage('theme', 'dark');
+                    } else {
+                        body.classList.remove('dark-mode');
+                        saveToLocalStorage('theme', 'light');
+                    }
                 }
             }
 
@@ -517,14 +586,18 @@
              * Shows the reset confirmation modal with an entry animation.
              */
             function showResetModal() {
-                resetConfirmModal.classList.add('show');
+                if (resetConfirmModal) { // Ensure modal exists
+                    resetConfirmModal.classList.add('show');
+                }
             }
 
             /**
              * Hides the reset confirmation modal with an exit animation.
              */
             function hideResetModal() {
-                resetConfirmModal.classList.remove('show');
+                if (resetConfirmModal) { // Ensure modal exists
+                    resetConfirmModal.classList.remove('show');
+                }
             }
 
             // --- Event Handlers ---
@@ -532,6 +605,7 @@
             function handleButtonClick() {
                 updateClickCount(count + 1);
                 animateClickCount();
+                playClickSound();
             }
 
             function handleResetRequest() {
@@ -548,9 +622,10 @@
             }
 
             function handleThemeToggle() {
-                // Toggle 'dark-mode' class and get its current state
-                const isDarkModeNow = body.classList.toggle('dark-mode');
-                setTheme(isDarkModeNow);
+                if (body) { // Ensure body element exists
+                    const isDarkModeNow = body.classList.toggle('dark-mode');
+                    setTheme(isDarkModeNow);
+                }
             }
 
             // --- Initialization ---
@@ -559,26 +634,47 @@
              * Initializes the application: loads saved state, sets up event listeners.
              */
             function initializeApp() {
-                // Display the initial count loaded from localStorage
-                clickCountDisplay.textContent = count;
-
-                // Apply saved theme on load
-                const savedTheme = localStorage.getItem('theme');
-                if (savedTheme === 'dark') {
-                    setTheme(true);
-                } else {
-                    setTheme(false); // Default to light if no theme or 'light' is saved
+                // Load initial count
+                count = parseInt(getFromLocalStorage('clickCount', 0));
+                if (clickCountDisplay) {
+                    clickCountDisplay.textContent = count;
                 }
 
-                // Add class to trigger container entry animation
-                container.classList.add('loaded');
+                // Load initial theme
+                const savedTheme = getFromLocalStorage('theme', 'light');
+                setTheme(savedTheme === 'dark');
 
-                // Attach event listeners
-                clickButton.addEventListener('click', handleButtonClick);
-                resetButton.addEventListener('click', handleResetRequest);
-                themeToggleButton.addEventListener('click', handleThemeToggle);
-                confirmYesButton.addEventListener('click', handleResetConfirm);
-                confirmNoButton.addEventListener('click', handleResetCancel);
+                // Add loaded class for animation (if container exists)
+                if (container) {
+                    container.classList.add('loaded');
+                }
+
+                // Attach event listeners only if elements exist
+                if (clickButton) {
+                    clickButton.addEventListener('click', handleButtonClick);
+                } else {
+                    console.error("Click button with ID 'clickButton' not found. Core functionality will not work.");
+                }
+                if (resetButton) {
+                    resetButton.addEventListener('click', handleResetRequest);
+                } else {
+                    console.warn("Reset button with ID 'resetButton' not found.");
+                }
+                if (themeToggleButton) {
+                    themeToggleButton.addEventListener('click', handleThemeToggle);
+                } else {
+                    console.warn("Theme toggle button with ID 'themeToggle' not found.");
+                }
+                if (confirmYesButton) {
+                    confirmYesButton.addEventListener('click', handleResetConfirm);
+                } else {
+                    console.warn("Modal confirm button with ID 'confirmYes' not found.");
+                }
+                if (confirmNoButton) {
+                    confirmNoButton.addEventListener('click', handleResetCancel);
+                } else {
+                    console.warn("Modal cancel button with ID 'confirmNo' not found.");
+                }
             }
 
             // Call the initialization function when the DOM is fully loaded
