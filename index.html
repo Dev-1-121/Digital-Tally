@@ -221,7 +221,7 @@
         #resetButton:hover {
             background-color: var(--reset-button-hover);
             transform: translateY(-3px); /* Consistent lift */
-            box-shadow: 0 7px 14px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 7plx 14px rgba(0, 0, 0, 0.3);
         }
 
 
@@ -527,6 +527,7 @@
             const autoplayMessage = document.getElementById('autoplayMessage');
 
             // --- Audio Setup ---
+            // This is the SINGLE audio element we will use. No arrays of sounds here.
             const clickSoundElement = document.getElementById('clickSound1');
             let isSoundReady = false; // Flag to track if sound is ready to play
 
@@ -534,7 +535,6 @@
                 clickSoundElement.volume = DEFAULT_SOUND_VOLUME;
 
                 // Listen for 'canplaythrough' event to ensure sound is fully loaded
-                // This is more reliable than just 'preload="auto"' for knowing when it's truly ready
                 clickSoundElement.addEventListener('canplaythrough', () => {
                     isSoundReady = true;
                     console.log("clickSound1 is ready to play.");
@@ -634,7 +634,6 @@
             function playSoundEffect() {
                 // Check if the audio element exists and is ready to play
                 if (!clickSoundElement || !isSoundReady) {
-                    // This warning might appear if sound file not found or not fully loaded
                     console.warn("Sound element not found or not ready. Skipping playback.");
                     return;
                 }
