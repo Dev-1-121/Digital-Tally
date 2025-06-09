@@ -527,7 +527,8 @@
             const autoplayMessage = document.getElementById('autoplayMessage');
 
             // --- Audio Setup ---
-            // This is the SINGLE audio element we will use. No arrays of sounds here.
+            // This is the SINGLE audio element we will use. There is NO array of sounds here.
+            // This is why the "Sound element at index X" errors should stop.
             const clickSoundElement = document.getElementById('clickSound1');
             let isSoundReady = false; // Flag to track if sound is ready to play
 
