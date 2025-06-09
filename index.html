@@ -38,6 +38,10 @@
             --modal-button-confirm-hover: #218838;
             --modal-button-cancel-bg: #6c757d;
             --modal-button-cancel-hover: #5a6268;
+
+            /* Autoplay message */
+            --autoplay-msg-bg: #ffc107; /* Warning yellow */
+            --autoplay-msg-text: #343a40; /* Dark text */
         }
 
         /* Dark Mode Overrides */
@@ -66,6 +70,10 @@
             --modal-button-confirm-hover: #5cb372;
             --modal-button-cancel-bg: #6c757d;
             --modal-button-cancel-hover: #5a6268;
+
+            /* Autoplay message */
+            --autoplay-msg-bg: #6c757d; /* Darker grey */
+            --autoplay-msg-text: #e0e0e0; /* Light text */
         }
 
         /* ============================ */
@@ -81,7 +89,7 @@
             margin: 0;
             background-color: var(--bg-color);
             color: var(--text-color);
-            transition: background-color 0.4s ease, color 0.4s ease;
+            transition: background-color 0.5s ease, color 0.5s ease; /* Slightly longer transition for theme change */
             padding: 20px;
             box-sizing: border-box;
         }
@@ -92,17 +100,16 @@
             border-radius: 15px;
             box-shadow: 0 10px 25px var(--shadow-color);
             text-align: center;
-            transition: background-color 0.4s ease, box-shadow 0.4s ease;
+            transition: background-color 0.5s ease, box-shadow 0.5s ease; /* Slightly longer transition */
             max-width: 90%;
             width: 400px;
             box-sizing: border-box;
-            /* Initial state for entry animation */
             opacity: 0;
             transform: translateY(20px) scale(0.95);
         }
 
         .container.loaded {
-            animation: fadeInScaleUp 0.6s ease-out forwards;
+            animation: fadeInScaleUp 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; /* Smoother ease-out cubic-bezier */
         }
 
         @keyframes fadeInScaleUp {
@@ -120,7 +127,7 @@
             color: var(--primary-color);
             margin-bottom: 25px;
             font-size: 2.2em;
-            transition: color 0.4s ease;
+            transition: color 0.5s ease; /* Consistent transition time */
         }
 
         /* ============================ */
@@ -139,18 +146,17 @@
             font-weight: 700;
             color: var(--accent-color);
             margin: 35px auto;
-            /* Using transform for efficient animation */
-            transition: background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease, transform 0.1s ease;
+            transition: background-color 0.5s ease, border-color 0.5s ease, color 0.5s ease, transform 0.1s ease;
             user-select: none;
         }
 
         #clickCount.bouncing {
-            animation: bounce 0.15s ease-out; /* Slightly longer bounce for visual feedback */
+            animation: bounce 0.2s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* More pronounced, spring-like bounce */
         }
 
         @keyframes bounce {
             0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+            50% { transform: scale(1.12); } /* Slightly larger scale */
             100% { transform: scale(1); }
         }
 
@@ -164,14 +170,14 @@
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.2s ease;
+            transition: background-color 0.3s ease, transform 0.15s ease, box-shadow 0.2s ease; /* Slightly longer transform for hover */
             margin: 10px 5px;
             font-weight: 700;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             display: inline-block;
             vertical-align: top;
-            position: relative; /* Needed for hover/active effects */
-            overflow: hidden; /* For ripple effect if added later */
+            position: relative;
+            overflow: hidden;
         }
 
         #clickButton {
@@ -180,18 +186,18 @@
 
         #clickButton:hover {
             background-color: var(--primary-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            transform: translateY(-3px); /* Slightly more pronounced lift */
+            box-shadow: 0 7px 14px rgba(0, 0, 0, 0.3); /* Slightly larger shadow */
         }
 
         #clickButton:active {
             transform: translateY(0);
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
             background-color: var(--feedback-color);
-            animation: buttonPress 0.1s ease-out; /* Add a quick press animation */
+            animation: buttonPress 0.1s ease-out;
         }
         #resetButton:active {
-             animation: buttonPress 0.1s ease-out; /* Apply to reset too */
+             animation: buttonPress 0.1s ease-out;
         }
 
         @keyframes buttonPress {
@@ -214,8 +220,8 @@
 
         #resetButton:hover {
             background-color: var(--reset-button-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            transform: translateY(-3px); /* Consistent lift */
+            box-shadow: 0 7px 14px rgba(0, 0, 0, 0.3);
         }
 
 
@@ -240,24 +246,25 @@
             z-index: 100;
             border: 2px solid var(--toggle-bg);
             color: var(--button-text-color);
-            transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.2s ease; /* Ensure transition on colors too */
+            transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.2s ease, transform 0.1s ease; /* Added transform transition for :active */
         }
 
         #themeToggle:hover {
             background-color: var(--toggle-hover);
             border-color: var(--toggle-hover);
+            transform: translateY(-2px); /* Slight lift on hover */
         }
 
         #themeToggle:active {
              background-color: var(--feedback-color);
              border-color: var(--feedback-color);
+             transform: translateY(0); /* Return to original position */
         }
 
         #themeToggle .icon {
             position: absolute;
             font-size: 1.4em;
             line-height: 1;
-            /* Apply transition to both opacity and transform for smooth slide effect */
             transition: opacity 0.4s ease, transform 0.4s ease;
             white-space: nowrap;
         }
@@ -269,12 +276,12 @@
 
         body.dark-mode #themeToggle .sun-icon {
             opacity: 0;
-            transform: translateX(-40px); /* Pushed further left to ensure hiding */
+            transform: translateX(-40px);
         }
 
         #themeToggle .moon-icon {
             opacity: 0;
-            transform: translateX(40px); /* Pushed further right to ensure hiding */
+            transform: translateX(40px);
         }
 
         body.dark-mode #themeToggle .moon-icon {
@@ -291,14 +298,14 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.6); /* Slightly darker overlay */
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 1000;
             opacity: 0;
             visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
+            transition: opacity 0.4s ease, visibility 0.4s ease; /* Smoother transition */
         }
 
         .modal-overlay.show {
@@ -315,10 +322,9 @@
             text-align: center;
             max-width: 350px;
             width: 90%;
-            /* Initial state for modal entry animation */
-            transform: translateY(-50px) scale(0.9);
+            transform: translateY(-30px) scale(0.95); /* Adjusted initial state */
             opacity: 0;
-            transition: transform 0.3s ease, opacity 0.3s ease;
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smoother cubic-bezier for modal */
         }
 
         .modal-overlay.show .modal-content {
@@ -357,7 +363,7 @@
 
         .modal-buttons button.confirm:hover {
             background-color: var(--modal-button-confirm-hover);
-            transform: translateY(-1px);
+            transform: translateY(-2px); /* Consistent lift */
         }
 
         .modal-buttons button.cancel {
@@ -367,8 +373,37 @@
 
         .modal-buttons button.cancel:hover {
             background-color: var(--modal-button-cancel-hover);
-            transform: translateY(-1px);
+            transform: translateY(-2px);
         }
+
+        /* ============================ */
+        /* Autoplay Message Styles */
+        /* ============================ */
+        #autoplayMessage {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--autoplay-msg-bg);
+            color: var(--autoplay-msg-text);
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            font-size: 0.9em;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smoother animation */
+            z-index: 1001;
+            min-width: 250px;
+            text-align: center;
+        }
+
+        #autoplayMessage.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(-15px); /* More pronounced lift animation */
+        }
+
 
         /* ============================ */
         /* Media Queries (Responsiveness) */
@@ -430,6 +465,11 @@
                 width: 90px;
                 padding: 8px 20px;
             }
+
+            #autoplayMessage {
+                width: 80%;
+                padding: 8px 15px;
+            }
         }
     </style>
 </head>
@@ -456,156 +496,234 @@
         </div>
     </div>
 
-    <audio id="clickSound" preload="auto">
-        <source src="click.mp3" type="audio/mpeg">
-        <source src="click.ogg" type="audio/ogg">
-        <source src="click.wav" type="audio/wav">
-        Your browser does not support the audio element.
+    <div id="autoplayMessage"></div>
+
+    <audio id="clickSound1" preload="auto">
+        <source src="click1.mp3" type="audio/mpeg">
+        <source src="click1.ogg" type="audio/ogg">
+        Your browser does not support the audio element or the provided audio formats.
+    </audio>
+    <audio id="clickSound2" preload="auto">
+        <source src="click2.mp3" type="audio/mpeg">
+        <source src="click2.ogg" type="audio/ogg">
+        Your browser does not support the audio element or the provided audio formats.
+    </audio>
+    <audio id="clickSound3" preload="auto">
+        <source src="click3.mp3" type="audio/mpeg">
+        <source src="click3.ogg" type="audio/ogg">
+        Your browser does not support the audio element or the provided audio formats.
     </audio>
 
+
     <script>
-        // Use an IIFE (Immediately Invoked Function Expression) for better encapsulation
-        // This helps avoid polluting the global scope and organizes the code.
+        // Using an Immediately Invoked Function Expression (IIFE)
+        // This creates a private scope for all variables and functions, preventing global pollution.
         (function() {
-            // --- DOM Elements ---
-            // It's good practice to get references to all elements once at the start.
-            // Add checks to ensure elements exist to prevent errors if IDs are changed/missing.
+            // --- Cache DOM Elements ---
+            // Fetching elements once at the start improves performance and code clarity.
+            // Explicit checks are added during event listener attachment in initializeApp.
             const clickCountDisplay = document.getElementById('clickCount');
             const clickButton = document.getElementById('clickButton');
             const resetButton = document.getElementById('resetButton');
             const themeToggleButton = document.getElementById('themeToggle');
             const body = document.body;
-            const container = document.querySelector('.container'); // Using querySelector here
+            const container = document.querySelector('.container');
             const resetConfirmModal = document.getElementById('resetConfirmModal');
             const confirmYesButton = document.getElementById('confirmYes');
             const confirmNoButton = document.getElementById('confirmNo');
+            const autoplayMessage = document.getElementById('autoplayMessage');
 
-            // --- Audio Elements ---
-            const clickSoundElement = document.getElementById('clickSound');
-            if (clickSoundElement) { // Check if the audio element exists
-                clickSoundElement.volume = 0.6; // Adjust as needed (0.0 to 1.0)
-            } else {
-                console.warn("Audio element with ID 'clickSound' not found. Sound effects will not play.");
+            // --- Audio Setup ---
+            // Store references to all click sound elements in an array
+            const clickSoundElements = [
+                document.getElementById('clickSound1'),
+                document.getElementById('clickSound2'),
+                document.getElementById('clickSound3')
+            ].filter(el => el instanceof HTMLAudioElement); // Filter out nulls AND ensure it's an audio element
+
+            // Set default volume for all found sound elements
+            clickSoundElements.forEach(soundElement => {
+                soundElement.volume = 0.6; // Adjust as needed (0.0 to 1.0)
+            });
+
+            if (clickSoundElements.length === 0) {
+                console.error("No valid audio elements (clickSound1, clickSound2, clickSound3) found. Sound effects will not play. Please check your HTML and ensure audio files are correctly placed.");
             }
 
+
             // --- State Variables ---
-            let count = 0; // Initialize with 0, will be updated from localStorage
+            // Centralized state helps manage data flow.
+            let count = 0; // Initialize with 0, will be loaded from localStorage
+            let messageTimeoutId; // To manage the autoplay message display timeout
 
             // --- Utility Functions ---
 
             /**
              * Safely retrieves a value from localStorage.
-             * @param {string} key - The key to retrieve.
-             * @param {any} defaultValue - The value to return if key is not found or an error occurs.
-             * @returns {any} The retrieved value or defaultValue.
+             * Wraps localStorage.getItem in a try-catch for robustness against security/quota errors.
+             * @param {string} key - The key of the item to retrieve.
+             * @param {any} defaultValue - The value to return if the key is not found or an error occurs.
+             * @returns {string|any} The retrieved value or the default value.
              */
             function getFromLocalStorage(key, defaultValue) {
                 try {
                     const storedValue = localStorage.getItem(key);
+                    // Return stored value if it exists, otherwise the default.
                     return storedValue !== null ? storedValue : defaultValue;
-                } catch (e) {
-                    console.error(`Error reading from localStorage for key "${key}":`, e);
-                    // Optionally, show a user-friendly message, e.g., "Could not load saved data."
-                    return defaultValue;
+                } catch (error) {
+                    console.error(`Error reading from localStorage for key "${key}":`, error);
+                    return defaultValue; // Return default on error
                 }
             }
 
             /**
-             * Safely sets a value in localStorage.
-             * @param {string} key - The key to set.
+             * Safely stores a value in localStorage.
+             * Wraps localStorage.setItem in a try-catch for robustness against security/quota errors.
+             * @param {string} key - The key of the item to store.
              * @param {any} value - The value to store.
              */
             function saveToLocalStorage(key, value) {
                 try {
                     localStorage.setItem(key, value);
-                } catch (e) {
-                    console.error(`Error writing to localStorage for key "${key}":`, e);
-                    // This often catches QuotaExceededError or SecurityError
-                    // Optionally, inform the user: "Could not save settings."
+                } catch (error) {
+                    console.error(`Error writing to localStorage for key "${key}":`, error);
+                    // Optionally, provide user feedback here if saving is critical.
                 }
             }
 
             /**
              * Updates the displayed click count and saves it to localStorage.
-             * @param {number} newCount - The new count value to set.
+             * @param {number} newCount - The new count value.
              */
             function updateClickCount(newCount) {
                 count = newCount;
-                if (clickCountDisplay) { // Ensure element exists before updating
+                if (clickCountDisplay) {
                     clickCountDisplay.textContent = count;
                 }
-                saveToLocalStorage('clickCount', count); // Use safe localStorage function
+                saveToLocalStorage('clickCount', count);
             }
 
             /**
-             * Applies a bounce animation to the click count display.
+             * Applies a subtle bounce animation to the click count display.
+             * Uses requestAnimationFrame for optimal browser performance.
              */
             function animateClickCount() {
-                if (clickCountDisplay) { // Ensure element exists
-                    clickCountDisplay.classList.remove('bouncing');
-                    // Use requestAnimationFrame for smoother animation triggering
-                    requestAnimationFrame(() => {
-                        clickCountDisplay.classList.add('bouncing');
-                    });
-                }
+                if (!clickCountDisplay) return; // Guard clause: Exit if element not found
+
+                clickCountDisplay.classList.remove('bouncing');
+                // Force reflow to restart animation (by triggering a read of an offset property)
+                void clickCountDisplay.offsetWidth; // This line forces reflow
+                requestAnimationFrame(() => {
+                    clickCountDisplay.classList.add('bouncing');
+                });
             }
 
             /**
-             * Plays the click sound effect.
+             * Displays a temporary message to the user, fading out after a duration.
+             * @param {string} message - The message to display.
+             * @param {number} [duration=3000] - Duration in milliseconds before hiding the message.
              */
-            function playClickSound() {
-                if (clickSoundElement) { // Ensure element exists
-                    clickSoundElement.currentTime = 0; // Reset to start for rapid clicks
-                    clickSoundElement.play().catch(e => {
-                        // This catch block handles cases where play() fails (e.g., NotAllowedError due to autoplay policy)
-                        // Or NotSupportedError if all <source> formats fail, or NetworkError if file is not found.
-                        console.warn("Error playing sound:", e.message);
-                        // For a better user experience, you might show a small, temporary message like
-                        // "Sound blocked by browser. Please interact with the page." if it's a NotAllowedError.
-                    });
-                }
+            function showTemporaryMessage(message, duration = 3000) {
+                if (!autoplayMessage) return; // Guard clause
+
+                autoplayMessage.textContent = message;
+                autoplayMessage.classList.add('show');
+
+                // Clear any previous timeout to prevent message flickering
+                clearTimeout(messageTimeoutId);
+                messageTimeoutId = setTimeout(() => {
+                    autoplayMessage.classList.remove('show');
+                }, duration);
             }
 
             /**
-             * Sets the theme (dark/light) and saves the preference to localStorage.
-             * @param {boolean} isDarkMode - True for dark mode, false for light mode.
+             * Randomly selects and plays one of the available click sound elements.
+             * Handles browser autoplay policy errors and potential loading issues.
+             */
+            function playRandomClickSound() {
+                if (clickSoundElements.length === 0) {
+                    console.warn("No click sound elements available to play. Skipping sound playback.");
+                    return;
+                }
+
+                // Select a random sound element
+                const randomIndex = Math.floor(Math.random() * clickSoundElements.length);
+                const soundToPlay = clickSoundElements[randomIndex];
+
+                // Ensure the selected sound element is valid and ready
+                if (!soundToPlay || soundToPlay.readyState < 2) { // readyState < 2 means not enough data for playback
+                    console.warn(`Sound element at index ${randomIndex} is not ready (readyState: ${soundToPlay ? soundToPlay.readyState : 'N/A'}). Skipping playback.`);
+                    showTemporaryMessage("Sound not ready. Check file paths and formats!");
+                    return;
+                }
+
+                // Stop and reset the chosen sound if it's currently playing to allow overlapping
+                // or very rapid successive plays.
+                soundToPlay.pause();
+                soundToPlay.currentTime = 0;
+
+                // Play the sound and catch any potential errors (e.g., autoplay blocked)
+                soundToPlay.play().catch(error => {
+                    // This catch block handles Promises rejected due to various issues.
+                    // Common errors include NotAllowedError (autoplay policy) or DOMException.
+                    console.warn("Error playing sound:", error.message, error.name);
+
+                    if (error.name === 'NotAllowedError') {
+                        // This typically means the user hasn't interacted with the page enough
+                        // for autoplay to be permitted. A simple click might not always be enough.
+                        showTemporaryMessage("Browser blocked sound. Click again or interact more!");
+                    } else if (error.name === 'NotSupportedError' || error.name === 'NetworkError') {
+                        // File not found, corrupted, or unsupported format.
+                        showTemporaryMessage("Sound file issue. Check console. (e.g., clickX.mp3/ogg files)");
+                    } else {
+                        // Other unexpected errors
+                        showTemporaryMessage("Sound playback failed. Check console.");
+                    }
+                });
+            }
+
+
+            /**
+             * Sets the body's theme class and saves the preference to localStorage.
+             * @param {boolean} isDarkMode - True to set dark mode, false for light mode.
              */
             function setTheme(isDarkMode) {
-                if (body) { // Ensure body element exists
-                    if (isDarkMode) {
-                        body.classList.add('dark-mode');
-                        saveToLocalStorage('theme', 'dark');
-                    } else {
-                        body.classList.remove('dark-mode');
-                        saveToLocalStorage('theme', 'light');
-                    }
+                if (!body) return; // Guard clause
+
+                if (isDarkMode) {
+                    body.classList.add('dark-mode');
+                    saveToLocalStorage('theme', 'dark');
+                } else {
+                    body.classList.remove('dark-mode');
+                    saveToLocalStorage('theme', 'light');
                 }
             }
 
             /**
-             * Shows the reset confirmation modal with an entry animation.
+             * Displays the reset confirmation modal.
              */
             function showResetModal() {
-                if (resetConfirmModal) { // Ensure modal exists
+                if (resetConfirmModal) {
                     resetConfirmModal.classList.add('show');
                 }
             }
 
             /**
-             * Hides the reset confirmation modal with an exit animation.
+             * Hides the reset confirmation modal.
              */
             function hideResetModal() {
-                if (resetConfirmModal) { // Ensure modal exists
+                if (resetConfirmModal) {
                     resetConfirmModal.classList.remove('show');
                 }
             }
 
             // --- Event Handlers ---
+            // Named functions for event handlers improve readability and reusability.
 
             function handleButtonClick() {
                 updateClickCount(count + 1);
                 animateClickCount();
-                playClickSound();
+                playRandomClickSound(); // Call the new random sound function
             }
 
             function handleResetRequest() {
@@ -622,7 +740,8 @@
             }
 
             function handleThemeToggle() {
-                if (body) { // Ensure body element exists
+                if (body) {
+                    // Toggle the 'dark-mode' class and set theme based on its new state
                     const isDarkModeNow = body.classList.toggle('dark-mode');
                     setTheme(isDarkModeNow);
                 }
@@ -632,52 +751,60 @@
 
             /**
              * Initializes the application: loads saved state, sets up event listeners.
+             * This function centralizes all startup logic.
              */
             function initializeApp() {
-                // Load initial count
+                // 1. Load initial count from localStorage
+                // parseInt is used to ensure the retrieved value is treated as a number.
                 count = parseInt(getFromLocalStorage('clickCount', 0));
                 if (clickCountDisplay) {
                     clickCountDisplay.textContent = count;
                 }
 
-                // Load initial theme
+                // 2. Load initial theme preference
                 const savedTheme = getFromLocalStorage('theme', 'light');
                 setTheme(savedTheme === 'dark');
 
-                // Add loaded class for animation (if container exists)
+                // 3. Add loaded class for container animation (if container element exists)
                 if (container) {
                     container.classList.add('loaded');
                 }
 
-                // Attach event listeners only if elements exist
+                // 4. Attach Event Listeners
+                // Only attach listeners if the corresponding DOM element was successfully found.
+                // This makes the script more resilient to missing HTML elements.
                 if (clickButton) {
                     clickButton.addEventListener('click', handleButtonClick);
                 } else {
-                    console.error("Click button with ID 'clickButton' not found. Core functionality will not work.");
+                    console.error("Critical: Click button with ID 'clickButton' not found. Core functionality will not work.");
                 }
+
                 if (resetButton) {
                     resetButton.addEventListener('click', handleResetRequest);
                 } else {
-                    console.warn("Reset button with ID 'resetButton' not found.");
+                    console.warn("Warning: Reset button with ID 'resetButton' not found.");
                 }
+
                 if (themeToggleButton) {
                     themeToggleButton.addEventListener('click', handleThemeToggle);
                 } else {
-                    console.warn("Theme toggle button with ID 'themeToggle' not found.");
+                    console.warn("Warning: Theme toggle button with ID 'themeToggle' not found.");
                 }
+
                 if (confirmYesButton) {
                     confirmYesButton.addEventListener('click', handleResetConfirm);
                 } else {
-                    console.warn("Modal confirm button with ID 'confirmYes' not found.");
+                    console.warn("Warning: Modal confirm button with ID 'confirmYes' not found.");
                 }
+
                 if (confirmNoButton) {
                     confirmNoButton.addEventListener('click', handleResetCancel);
                 } else {
-                    console.warn("Modal cancel button with ID 'confirmNo' not found.");
+                    console.warn("Warning: Modal cancel button with ID 'confirmNo' not found.");
                 }
             }
 
-            // Call the initialization function when the DOM is fully loaded
+            // Ensure the DOM is fully loaded before trying to access elements
             document.addEventListener('DOMContentLoaded', initializeApp);
 
         })(); // End of IIFE
