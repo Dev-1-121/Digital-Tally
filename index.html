@@ -13,7 +13,7 @@
         /* CSS Variables (Theming)      */
         /* ============================ */
         :root {
-            /* Light Mode Defaults */
+            /* Default Theme (Classic Light) - These are now primarily for `classic-light` */
             --bg-color: #f0f2f5;
             --text-color: #333;
             --container-bg: #ffffff;
@@ -22,13 +22,20 @@
             --accent-color: #28a745;
             --shadow-color: rgba(0, 0, 0, 0.15);
             --button-text-color: white;
-            --toggle-bg: #007bff;
-            --toggle-hover: #0056b3;
+            --settings-button-bg: #6c757d; /* Grey for settings button */
+            --settings-button-hover: #5a6268;
             --circle-bg: #e2e6ea;
             --circle-border: #c3c7cb;
             --feedback-color: #1a7e32;
             --reset-button-bg: #dc3545;
             --reset-button-hover: #c82333;
+            --slider-track-bg: #ddd;
+            --slider-thumb-bg: var(--primary-color);
+            --theme-button-bg: #e9ecef;
+            --theme-button-text: #333;
+            --theme-button-hover-bg: #dee2e6;
+            --theme-button-active-bg: var(--primary-color);
+            --theme-button-active-text: white;
 
             /* Modal specific colors */
             --modal-bg: #ffffff;
@@ -42,9 +49,18 @@
             /* Autoplay message */
             --autoplay-msg-bg: #ffc107; /* Warning yellow */
             --autoplay-msg-text: #343a40; /* Dark text */
+            
+            /* Collapsible section colors */
+            --collapsible-header-bg: #f8f9fa;
+            --collapsible-header-hover-bg: #e2e6ea;
+            --collapsible-border: #e9ecef;
+            --radio-text-color: #555;
+            --radio-checked-bg: var(--primary-color);
+            --radio-checked-border: var(--primary-color);
+            --radio-unchecked-border: #ccc;
         }
 
-        /* Dark Mode Overrides */
+        /* Dark Mode Overrides (Classic Dark) */
         body.dark-mode {
             --bg-color: #1a1a2e;
             --text-color: #e0e0e0;
@@ -54,13 +70,20 @@
             --accent-color: #6edc86;
             --shadow-color: rgba(0, 0, 0, 0.4);
             --button-text-color: #e0e0e0;
-            --toggle-bg: #7a82da;
-            --toggle-hover: #5c62b2;
+            --settings-button-bg: #5a6268;
+            --settings-button-hover: #6c757d;
             --circle-bg: #3a3a5e;
             --circle-border: #52528c;
             --feedback-color: #4CAF50;
             --reset-button-bg: #e66b72;
             --reset-button-hover: #d25057;
+            --slider-track-bg: #52528c;
+            --slider-thumb-bg: var(--primary-color);
+            --theme-button-bg: #3a3a5e;
+            --theme-button-text: #e0e0e0;
+            --theme-button-hover-bg: #52528c;
+            --theme-button-active-bg: var(--primary-color);
+            --theme-button-active-text: #e0e0e0;
 
             /* Modal specific colors for dark mode */
             --modal-bg: #3a3a5e;
@@ -74,7 +97,184 @@
             /* Autoplay message */
             --autoplay-msg-bg: #6c757d; /* Darker grey */
             --autoplay-msg-text: #e0e0e0; /* Light text */
+
+            /* Collapsible section colors */
+            --collapsible-header-bg: #3a3a5e;
+            --collapsible-header-hover-bg: #52528c;
+            --collapsible-border: #2b2b4d;
+            --radio-text-color: #e0e0e0;
+            --radio-checked-bg: var(--primary-color);
+            --radio-checked-border: var(--primary-color);
+            --radio-unchecked-border: #888;
         }
+
+        /* Midnight Theme (New Dark Theme) */
+        body.midnight-theme {
+            --bg-color: #0d1a2b; /* Very dark blue/black */
+            --text-color: #c0d9ed; /* Light grey-blue */
+            --container-bg: #1e3a5a; /* Darker blue */
+            --primary-color: #4a77d1; /* Muted blue */
+            --primary-hover: #375bb3;
+            --accent-color: #55d09f; /* Teal green */
+            --shadow-color: rgba(0, 0, 0, 0.5);
+            --button-text-color: #c0d9ed;
+            --settings-button-bg: #3a4b65;
+            --settings-button-hover: #4e6280;
+            --circle-bg: #2d4f75;
+            --circle-border: #3c6a99;
+            --feedback-color: #6edc86; /* Same as dark mode accent */
+            --reset-button-bg: #d15a5a; /* Muted red */
+            --reset-button-hover: #b34a4a;
+            --slider-track-bg: #3a4b65;
+            --slider-thumb-bg: var(--primary-color);
+            --theme-button-bg: #2d4f75;
+            --theme-button-text: #c0d9ed;
+            --theme-button-hover-bg: #3a5c80;
+            --theme-button-active-bg: var(--primary-color);
+            --theme-button-active-text: #e0e0e0;
+
+            /* Modal specific colors for midnight theme */
+            --modal-bg: #1e3a5a;
+            --modal-text: #c0d9ed;
+            --modal-shadow: rgba(0, 0, 0, 0.7);
+            --modal-button-confirm-bg: #55d09f;
+            --modal-button-confirm-hover: #45b38a;
+            --modal-button-cancel-bg: #3a4b65;
+            --modal-button-cancel-hover: #4e6280;
+
+            /* Autoplay message */
+            --autoplay-msg-bg: #3a4b65; 
+            --autoplay-msg-text: #c0d9ed; 
+
+            /* Collapsible section colors */
+            --collapsible-header-bg: #1e3a5a;
+            --collapsible-header-hover-bg: #2d4f75;
+            --collapsible-border: #0d1a2b;
+            --radio-text-color: #c0d9ed;
+            --radio-checked-bg: var(--primary-color);
+            --radio-checked-border: var(--primary-color);
+            --radio-unchecked-border: #4e6280;
+        }
+
+        /* Deep Dark Theme (New Dark Theme) */
+        body.deep-dark-theme {
+            --bg-color: #121212; /* Very dark grey, almost black */
+            --text-color: #e0e0e0; /* Light grey */
+            --container-bg: #1e1e1e; /* Slightly lighter dark grey for contrast */
+            --primary-color: #bb86fc; /* Muted purple for primary actions */
+            --primary-hover: #9c5cde;
+            --accent-color: #03dac6; /* Teal accent */
+            --shadow-color: rgba(0, 0, 0, 0.6); /* Deeper shadows */
+            --button-text-color: #ffffff; /* White text on buttons */
+            --settings-button-bg: #333333; /* Dark grey for settings */
+            --settings-button-hover: #4a4a4a;
+            --circle-bg: #242424; /* Darker circle background */
+            --circle-border: #424242; /* Slightly lighter circle border */
+            --feedback-color: #018786; /* Darker teal for feedback */
+            --reset-button-bg: #cf6679; /* Muted red for reset */
+            --reset-button-hover: #a63f53;
+            --slider-track-bg: #383838;
+            --slider-thumb-bg: var(--primary-color);
+            --theme-button-bg: #282828;
+            --theme-button-text: #e0e0e0;
+            --theme-button-hover-bg: #3f3f3f;
+            --theme-button-active-bg: var(--primary-color);
+            --theme-button-active-text: #ffffff;
+
+            /* Modal specific colors for deep dark theme */
+            --modal-bg: #222222;
+            --modal-text: #e0e0e0;
+            --modal-shadow: rgba(0, 0, 0, 0.8);
+            --modal-button-confirm-bg: #03dac6;
+            --modal-button-confirm-hover: #018786;
+            --modal-button-cancel-bg: #333333;
+            --modal-button-cancel-hover: #4a4a4a;
+
+            /* Autoplay message */
+            --autoplay-msg-bg: #424242; 
+            --autoplay-msg-text: #e0e0e0; 
+
+            /* Collapsible section colors */
+            --collapsible-header-bg: #282828;
+            --collapsible-header-hover-bg: #3a3a3a;
+            --collapsible-border: #121212;
+            --radio-text-color: #e0e0e0;
+            --radio-checked-bg: var(--primary-color);
+            --radio-checked-border: var(--primary-color);
+            --radio-unchecked-border: #666;
+        }
+
+
+        /* Oceanic Theme */
+        body.oceanic-theme {
+            --bg-color: #e0f2f7; /* Light blue */
+            --text-color: #003366; /* Dark blue */
+            --container-bg: #ffffff;
+            --primary-color: #007bb6; /* Ocean blue */
+            --primary-hover: #005f90;
+            --accent-color: #20b2aa; /* Light sea green */
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --button-text-color: white;
+            --settings-button-bg: #607d8b; /* Blue grey */
+            --settings-button-hover: #455a64;
+            --circle-bg: #a7d9eb;
+            --circle-border: #5fa8d3;
+            --feedback-color: #1a7e32;
+            --reset-button-bg: #ef5350; /* Red */
+            --reset-button-hover: #d32f2f;
+            --slider-track-bg: #81d4fa;
+            --slider-thumb-bg: var(--primary-color);
+            --theme-button-bg: #e1f5fe;
+            --theme-button-text: #003366;
+            --theme-button-hover-bg: #b3e5fc;
+            --theme-button-active-bg: var(--primary-color);
+            --theme-button-active-text: white;
+
+            /* Collapsible section colors */
+            --collapsible-header-bg: #e0f2f7;
+            --collapsible-header-hover-bg: #c1e0e9;
+            --collapsible-border: #b3e0ed;
+            --radio-text-color: #003366;
+            --radio-checked-bg: var(--primary-color);
+            --radio-checked-border: var(--primary-color);
+            --radio-unchecked-border: #81d4fa;
+        }
+
+        /* Forest Theme */
+        body.forest-theme {
+            --bg-color: #e8f5e9; /* Light green */
+            --text-color: #2e7d32; /* Dark green */
+            --container-bg: #ffffff;
+            --primary-color: #43a047; /* Forest green */
+            --primary-hover: #2e7d32;
+            --accent-color: #8bc34a; /* Light green accent */
+            --shadow-color: rgba(0, 0, 0, 0.12);
+            --button-text-color: white;
+            --settings-button-bg: #795548; /* Brown */
+            --settings-button-hover: #5d4037;
+            --circle-bg: #c8e6c9;
+            --circle-border: #a5d6a7;
+            --feedback-color: #1a7e32;
+            --reset-button-bg: #ff7043; /* Orange red */
+            --reset-button-hover: #f4511e;
+            --slider-track-bg: #aed581;
+            --slider-thumb-bg: var(--primary-color);
+            --theme-button-bg: #f1f8e9;
+            --theme-button-text: #2e7d32;
+            --theme-button-hover-bg: #dcedc8;
+            --theme-button-active-bg: var(--primary-color);
+            --theme-button-active-text: white;
+
+            /* Collapsible section colors */
+            --collapsible-header-bg: #e8f5e9;
+            --collapsible-header-hover-bg: #d4e7d4;
+            --collapsible-border: #c8e6c9;
+            --radio-text-color: #2e7d32;
+            --radio-checked-bg: var(--primary-color);
+            --radio-checked-border: var(--primary-color);
+            --radio-unchecked-border: #aed581;
+        }
+
 
         /* ============================ */
         /* Base / Layout Styles         */
@@ -196,7 +396,8 @@
             background-color: var(--feedback-color);
             animation: buttonPress 0.1s ease-out;
         }
-        #resetButton:active {
+        #resetButton:active,
+        #settingsButton:active {
              animation: buttonPress 0.1s ease-out;
         }
 
@@ -226,10 +427,10 @@
 
 
         /* ============================ */
-        /* Theme Toggle Button          */
+        /* Settings Button          */
         /* ============================ */
-        #themeToggle {
-            background-color: var(--toggle-bg);
+        #settingsButton {
+            background-color: var(--settings-button-bg);
             padding: 5px 8px;
             border-radius: 50px;
             box-shadow: 0 2px 5px var(--shadow-color);
@@ -244,53 +445,24 @@
             right: 20px;
             cursor: pointer;
             z-index: 100;
-            border: 2px solid var(--toggle-bg);
+            border: 2px solid var(--settings-button-bg);
             color: var(--button-text-color);
-            transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.2s ease, transform 0.1s ease; /* Added transform transition for :active */
+            transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.2s ease, transform 0.1s ease;
         }
 
-        #themeToggle:hover {
-            background-color: var(--toggle-hover);
-            border-color: var(--toggle-hover);
-            transform: translateY(-2px); /* Slight lift on hover */
+        #settingsButton:hover {
+            background-color: var(--settings-button-hover);
+            border-color: var(--settings-button-hover);
+            transform: translateY(-2px);
         }
 
-        #themeToggle:active {
-             background-color: var(--feedback-color);
-             border-color: var(--feedback-color);
-             transform: translateY(0); /* Return to original position */
-        }
-
-        #themeToggle .icon {
-            position: absolute;
+        #settingsButton .icon {
             font-size: 1.4em;
             line-height: 1;
-            transition: opacity 0.4s ease, transform 0.4s ease;
-            white-space: nowrap;
-        }
-
-        #themeToggle .sun-icon {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        body.dark-mode #themeToggle .sun-icon {
-            opacity: 0;
-            transform: translateX(-40px);
-        }
-
-        #themeToggle .moon-icon {
-            opacity: 0;
-            transform: translateX(40px);
-        }
-
-        body.dark-mode #themeToggle .moon-icon {
-            opacity: 1;
-            transform: translateX(0);
         }
 
         /* ============================ */
-        /* Custom Confirmation Modal    */
+        /* Custom Confirmation Modal / Settings Modal    */
         /* ============================ */
         .modal-overlay {
             position: fixed;
@@ -343,9 +515,11 @@
             display: flex;
             justify-content: center;
             gap: 15px;
+            margin-top: 20px; /* Space for modal content */
         }
 
         .modal-buttons button {
+            color: var(--button-text-color); /* Ensure consistent button text color */
             padding: 10px 25px;
             font-size: 1em;
             border-radius: 8px;
@@ -358,7 +532,6 @@
 
         .modal-buttons button.confirm {
             background-color: var(--modal-button-confirm-bg);
-            color: white;
         }
 
         .modal-buttons button.confirm:hover {
@@ -368,13 +541,226 @@
 
         .modal-buttons button.cancel {
             background-color: var(--modal-button-cancel-bg);
-            color: white;
         }
 
         .modal-buttons button.cancel:hover {
             background-color: var(--modal-button-cancel-hover);
             transform: translateY(-2px);
         }
+
+        /* Settings Modal Specific Styles */
+        #settingsModal .modal-content {
+            text-align: left;
+            padding-bottom: 20px; /* Adjust padding for inner elements */
+            overflow: hidden; /* Important for collapsed content */
+        }
+
+        #settingsModal h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 1.6em;
+            text-align: center;
+        }
+
+        /* Collapsible Section Styles */
+        .collapsible-section {
+            border: 1px solid var(--collapsible-border);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            overflow: hidden; /* Hide overflowing content during collapse */
+        }
+
+        .collapsible-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            background-color: var(--collapsible-header-bg);
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1.1em;
+            color: var(--text-color);
+            transition: background-color 0.2s ease;
+        }
+
+        .collapsible-header:hover {
+            background-color: var(--collapsible-header-hover-bg);
+        }
+
+        .collapsible-header .icon {
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible-header.active .icon {
+            transform: rotate(90deg); /* Rotate arrow when active */
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            padding: 0 15px; /* Initial padding when collapsed */
+            transition: max-height 0.4s ease-out, padding 0.4s ease-out; /* Smooth collapse/expand */
+            overflow: hidden;
+            background-color: var(--modal-bg); /* Ensure content background matches modal */
+        }
+
+        .collapsible-content.show {
+            /* max-height will be set by JS dynamically */
+            padding: 15px; /* Apply padding when expanded */
+        }
+
+        /* Specific padding for theme options within collapsed section */
+        .collapsible-content .theme-options {
+            margin-top: 0; /* Remove default margin from theme-options */
+            padding-top: 0;
+        }
+
+        /* Volume Slider */
+        .setting-item {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .setting-item label {
+            font-weight: 500;
+            color: var(--text-color);
+            flex-shrink: 0; /* Prevent label from shrinking */
+        }
+
+        input[type="range"] {
+            width: 100%;
+            -webkit-appearance: none; /* Override default look */
+            appearance: none;
+            height: 8px;
+            background: var(--slider-track-bg);
+            border-radius: 5px;
+            outline: none;
+            transition: background 0.2s;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--slider-thumb-bg);
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.2s, transform 0.1s;
+            margin-top: -7px; /* Adjust to center thumb on track */
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--slider-thumb-bg);
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover,
+        input[type="range"]::-moz-range-thumb:hover {
+            transform: scale(1.05);
+        }
+
+        /* Theme Buttons */
+        .theme-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px; /* Adjust margin for within collapsible content */
+        }
+
+        .theme-options button {
+            flex: 1 1 auto; /* Allow buttons to grow and shrink */
+            min-width: 90px;
+            max-width: 120px;
+            padding: 8px 15px;
+            font-size: 0.9em;
+            border-radius: 5px;
+            background-color: var(--theme-button-bg);
+            color: var(--theme-button-text);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.2s ease, transform 0.1s ease, color 0.2s ease;
+        }
+
+        .theme-options button:hover {
+            background-color: var(--theme-button-hover-bg);
+            transform: translateY(-2px);
+        }
+
+        .theme-options button.active-theme {
+            background-color: var(--theme-button-active-bg);
+            color: var(--theme-button-active-text);
+            font-weight: 700;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Radio Button Styles for Click Sound */
+        .sound-option-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .sound-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .sound-option input[type="radio"] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--radio-unchecked-border);
+            border-radius: 50%;
+            margin-right: 10px;
+            cursor: pointer;
+            outline: none;
+            transition: border-color 0.2s ease, background-color 0.2s ease;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .sound-option input[type="radio"]::before {
+            content: '';
+            display: block;
+            width: 10px;
+            height: 10px;
+            background-color: transparent;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+
+        .sound-option input[type="radio"]:checked {
+            border-color: var(--radio-checked-border);
+            background-color: var(--radio-checked-bg);
+        }
+
+        .sound-option input[type="radio"]:checked::before {
+            transform: translate(-50%, -50%) scale(1);
+            background-color: var(--button-text-color); /* Inner dot color */
+        }
+        
+        .sound-option label {
+            cursor: pointer;
+            font-size: 1em;
+            color: var(--radio-text-color);
+        }
+
 
         /* ============================ */
         /* Autoplay Message Styles */
@@ -439,23 +825,15 @@
                 margin-top: 20px;
             }
 
-            #themeToggle {
+            #settingsButton {
                 top: 15px;
                 right: 15px;
                 width: 40px;
                 height: 25px;
             }
 
-            #themeToggle .icon {
+            #settingsButton .icon {
                 font-size: 1.2em;
-            }
-
-            body.dark-mode #themeToggle .sun-icon {
-                transform: translateX(-30px);
-            }
-
-            #themeToggle .moon-icon {
-                transform: translateX(30px);
             }
 
             .modal-content {
@@ -470,13 +848,15 @@
                 width: 80%;
                 padding: 8px 15px;
             }
+
+            .theme-options button {
+                flex: 1 1 45%; /* Two buttons per row on small screens */
+            }
         }
     </style>
 </head>
-<body>
-    <button id="themeToggle" aria-label="Toggle dark mode">
-        <i class="icon sun-icon fas fa-sun" role="img" aria-label="Sun icon for light mode"></i>
-        <i class="icon moon-icon fas fa-moon" role="img" aria-label="Moon icon for dark mode"></i>
+<body class="dark-mode"> <button id="settingsButton" aria-label="Open settings">
+        <i class="icon fas fa-cog" role="img" aria-label="Settings icon"></i>
     </button>
 
     <div class="container">
@@ -496,11 +876,78 @@
         </div>
     </div>
 
+    <div id="settingsModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>Settings</h2>
+
+            <div class="collapsible-section">
+                <div class="collapsible-header" data-section="theme">
+                    <span>Themes</span>
+                    <i class="icon fas fa-chevron-right"></i>
+                </div>
+                <div class="collapsible-content" id="themeContent">
+                    <div class="theme-options">
+                        <button id="themeClassicLight" data-theme="classic-light">Classic Light</button>
+                        <button id="themeClassicDark" data-theme="classic-dark">Classic Dark</button>
+                        <button id="themeMidnight" data-theme="midnight">Midnight</button>
+                        <button id="themeDeepDark" data-theme="deep-dark">Deep Dark</button>
+                        <button id="themeOceanic" data-theme="oceanic">Oceanic</button>
+                        <button id="themeForest" data-theme="forest">Forest</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="collapsible-section">
+                <div class="collapsible-header" data-section="sound">
+                    <span>Sound</span>
+                    <i class="icon fas fa-chevron-right"></i>
+                </div>
+                <div class="collapsible-content" id="soundContent">
+                    <div class="setting-item">
+                        <label for="volumeSlider">Volume:</label>
+                        <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.6" aria-label="Sound volume control">
+                        <span id="volumeValue">60%</span>
+                    </div>
+
+                    <div class="setting-item sound-option-group">
+                        <label>Select Click Sound:</label>
+                        <div class="sound-option">
+                            <input type="radio" id="sound1Option" name="clickSound" value="sound1" checked>
+                            <label for="sound1Option">Sound 1</label>
+                        </div>
+                        <div class="sound-option">
+                            <input type="radio" id="sound2Option" name="clickSound" value="sound2">
+                            <label for="sound2Option">Sound 2</label>
+                        </div>
+                        <div class="sound-option">
+                            <input type="radio" id="sound3Option" name="clickSound" value="sound3">
+                            <label for="sound3Option">Sound 3</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-buttons">
+                <button id="settingsClose" class="cancel">Close</button>
+            </div>
+        </div>
+    </div>
+
     <div id="autoplayMessage"></div>
 
     <audio id="clickSound1" preload="auto">
         <source src="click1.mp3" type="audio/mpeg">
         <source src="click1.ogg" type="audio/ogg">
+        Your browser does not support the audio element or the provided audio formats.
+    </audio>
+    <audio id="clickSound2" preload="auto">
+        <source src="click2.mp3" type="audio/mpeg">
+        <source src="click2.ogg" type="audio/ogg">
+        Your browser does not support the audio element or the provided audio formats.
+    </audio>
+    <audio id="clickSound3" preload="auto">
+        <source src="click3.mp3" type="audio/mpeg">
+        <source src="click3.ogg" type="audio/ogg">
         Your browser does not support the audio element or the provided audio formats.
     </audio>
 
@@ -512,14 +959,18 @@
             // --- Constants / Configuration ---
             const LOCAL_STORAGE_COUNT_KEY = 'clickCount';
             const LOCAL_STORAGE_THEME_KEY = 'theme';
+            const LOCAL_STORAGE_VOLUME_KEY = 'volume';
+            const LOCAL_STORAGE_CLICK_SOUND_KEY = 'clickSound'; // Key for click sound preference
             const DEFAULT_SOUND_VOLUME = 0.6; // Volume from 0.0 to 1.0
             const DEBOUNCE_DELAY_MS = 150; // Delay for debouncing button clicks (milliseconds)
+            const DEFAULT_THEME = 'classic-dark'; // Changed default theme to 'classic-dark'
+            const DEFAULT_CLICK_SOUND = 'sound1'; // Default click sound (renamed)
 
             // --- Cache DOM Elements ---
             const clickCountDisplay = document.getElementById('clickCount');
             const clickButton = document.getElementById('clickButton');
             const resetButton = document.getElementById('resetButton');
-            const themeToggleButton = document.getElementById('themeToggle');
+            const settingsButton = document.getElementById('settingsButton');
             const body = document.body;
             const container = document.querySelector('.container');
             const resetConfirmModal = document.getElementById('resetConfirmModal');
@@ -527,32 +978,58 @@
             const confirmNoButton = document.getElementById('confirmNo');
             const autoplayMessage = document.getElementById('autoplayMessage');
 
+            // Settings modal elements
+            const settingsModal = document.getElementById('settingsModal');
+            const volumeSlider = document.getElementById('volumeSlider');
+            const volumeValueSpan = document.getElementById('volumeValue');
+            const themeOptionsContainer = document.querySelector('.theme-options');
+            const settingsCloseButton = document.getElementById('settingsClose');
+
+            // Collapsible sections
+            const collapsibleHeaders = document.querySelectorAll('#settingsModal .collapsible-header');
+
+            // Click sound options group
+            const clickSoundOptionsGroup = document.querySelector('.sound-option-group');
+
             // --- Audio Setup ---
-            const clickSoundElement = document.getElementById('clickSound1');
-            let isSoundReady = false; // Flag to track if sound is ready to play
+            // Using a Map for easier access and management of audio elements
+            const soundMap = new Map();
 
-            if (clickSoundElement instanceof HTMLAudioElement) {
-                clickSoundElement.volume = DEFAULT_SOUND_VOLUME;
+            function initializeAudioElement(id, name) {
+                const element = document.getElementById(id);
+                if (element instanceof HTMLAudioElement) {
+                    const soundData = {
+                        element: element,
+                        ready: false, // Flag to indicate if canplaythrough event has fired
+                        name: name
+                    };
+                    soundMap.set(name, soundData);
 
-                // Listen for 'canplaythrough' event to ensure sound is fully loaded
-                clickSoundElement.addEventListener('canplaythrough', () => {
-                    isSoundReady = true;
-                    console.log("clickSound1 is ready to play.");
-                }, { once: true }); // Use { once: true } to ensure this listener fires only once
+                    element.addEventListener('canplaythrough', () => {
+                        soundData.ready = true;
+                        console.log(`${soundData.name} is ready to play.`);
+                    }, { once: true });
 
-                // Handle error if the browser truly can't load the file
-                clickSoundElement.addEventListener('error', (e) => {
-                    console.error("Error loading clickSound1:", e);
-                    showTemporaryMessage("Sound file failed to load. Check console for details (e.g., click1.mp3/ogg).");
-                    isSoundReady = false; // Mark as not ready if an error occurs
-                });
-            } else {
-                console.error("Audio element with ID 'clickSound1' not found or is not an HTMLAudioElement. Sound effects will not play.");
+                    element.addEventListener('error', (e) => {
+                        console.error(`Error loading ${soundData.name} (ID: ${id}):`, e);
+                        showTemporaryMessage(`Sound file for ${soundData.name} failed to load. Check console.`);
+                        soundData.ready = false;
+                    });
+                } else {
+                    console.error(`Audio element with ID '${id}' not found or is not an HTMLAudioElement. Sound effect '${name}' will not play.`);
+                }
             }
 
+            initializeAudioElement('clickSound1', 'sound1');
+            initializeAudioElement('clickSound2', 'sound2');
+            initializeAudioElement('clickSound3', 'sound3');
+
             // --- State Variables ---
-            let count = 0; // Initialize with 0, will be loaded from localStorage
-            let messageTimeoutId; // To manage the autoplay message display timeout
+            let count = 0;
+            let messageTimeoutId;
+            let currentTheme = DEFAULT_THEME;
+            let currentClickSound = DEFAULT_CLICK_SOUND; // Tracks the currently selected click sound
+
 
             // --- Utility Functions ---
 
@@ -644,98 +1121,255 @@
             }
 
             /**
-             * Plays the main click sound effect.
+             * Plays the currently selected click sound effect.
              * Ensures sound plays on every click by resetting and playing.
              */
             function playSoundEffect() {
-                // Check if the audio element exists and is ready to play
-                if (!clickSoundElement || !isSoundReady) {
-                    console.warn("Sound element not found or not ready. Skipping playback.");
+                const soundData = soundMap.get(currentClickSound);
+
+                if (!soundData || !soundData.element) {
+                    console.warn(`Sound element for '${currentClickSound}' not found in map.`);
                     return;
                 }
 
-                // IMPORTANT for playing sound on every rapid click:
-                // 1. Pause any currently playing instance of this sound.
-                // 2. Reset the playback position to the beginning.
-                clickSoundElement.pause();
-                clickSoundElement.currentTime = 0;
+                if (!soundData.ready) {
+                    console.warn(`Sound '${currentClickSound}' is not yet ready to play.`);
+                    showTemporaryMessage(`Sound '${soundData.name.replace('sound', 'Sound ')}' is still loading or failed. Try again.`);
+                    return;
+                }
 
-                // Play the sound and catch any potential errors (e.g., browser autoplay policy)
-                clickSoundElement.play().catch(error => {
-                    console.warn("Error playing sound:", error.message, error.name);
+                const soundToPlay = soundData.element;
+                soundToPlay.pause();
+                soundToPlay.currentTime = 0; // Rewind to start for immediate replay
 
+                soundToPlay.play().catch(error => {
+                    // AbortError is common when calling play() rapidly, which is handled
                     if (error.name === 'NotAllowedError') {
-                        // This often means the user hasn't interacted with the page enough for autoplay
-                        showTemporaryMessage("Browser blocked sound. Click again or interact more!");
+                        showTemporaryMessage("Browser blocked sound. Interact more or click again!");
                     } else if (error.name === 'NotSupportedError') {
-                        // Sound format might not be supported by the browser, or file is corrupted.
                         showTemporaryMessage("Sound format not supported or file corrupted. Check console.");
-                    } else if (error.name !== 'AbortError') {
-                        // AbortError can happen on rapid clicks as previous play attempts are cancelled,
-                        // and usually doesn't need a message. Other errors should be shown.
+                    } else if (error.name !== 'AbortError') { // Ignore AbortError for rapid clicks
+                        console.error("Error playing sound:", error);
                         showTemporaryMessage("Sound playback failed. Check console for details.");
                     }
                 });
             }
 
+
             /**
-             * Sets the body's theme class and saves the preference to localStorage.
-             * @param {boolean} isDarkMode - True to set dark mode, false for light mode.
+             * Sets the application's theme and saves the preference to localStorage.
+             * Removes all theme-related classes and adds the chosen one.
+             * @param {string} themeName - The name of the theme to apply (e.g., 'classic-light', 'classic-dark', 'oceanic', 'forest', 'midnight', 'deep-dark').
              */
-            function setTheme(isDarkMode) {
+            function setTheme(themeName) {
                 if (!body) return;
 
-                if (isDarkMode) {
+                // Remove all existing theme classes
+                body.classList.remove('dark-mode', 'oceanic-theme', 'forest-theme', 'midnight-theme', 'deep-dark-theme');
+
+                // Apply the new theme class based on the themeName
+                if (themeName === 'classic-dark') {
                     body.classList.add('dark-mode');
-                    saveToLocalStorage(LOCAL_STORAGE_THEME_KEY, 'dark');
-                } else {
-                    body.classList.remove('dark-mode');
-                    saveToLocalStorage(LOCAL_STORAGE_THEME_KEY, 'light');
+                } else if (themeName === 'oceanic') {
+                    body.classList.add('oceanic-theme');
+                } else if (themeName === 'forest') {
+                    body.classList.add('forest-theme');
+                } else if (themeName === 'midnight') {
+                    body.classList.add('midnight-theme');
+                } else if (themeName === 'deep-dark') { // New Deep Dark theme
+                    body.classList.add('deep-dark-theme');
+                }
+                // 'classic-light' (default, if no class is added)
+
+                currentTheme = themeName; // Update the state variable
+                saveToLocalStorage(LOCAL_STORAGE_THEME_KEY, themeName);
+                updateActiveThemeButton(); // Update UI for active theme
+            }
+
+            /**
+             * Updates the 'active-theme' class on theme buttons in the settings modal.
+             */
+            function updateActiveThemeButton() {
+                if (!themeOptionsContainer) return;
+
+                const themeButtons = themeOptionsContainer.querySelectorAll('button[data-theme]');
+                themeButtons.forEach(button => {
+                    if (button.dataset.theme === currentTheme) {
+                        button.classList.add('active-theme');
+                    } else {
+                        button.classList.remove('active-theme');
+                    }
+                });
+            }
+
+            /**
+             * Updates the volume of all initialized sound effects and saves it to localStorage.
+             * Also updates the displayed volume percentage.
+             * @param {number} volume - The volume level (0.0 to 1.0).
+             */
+            function setSoundVolume(volume) {
+                soundMap.forEach(soundData => {
+                    if (soundData.element) {
+                        soundData.element.volume = volume;
+                    }
+                });
+                saveToLocalStorage(LOCAL_STORAGE_VOLUME_KEY, volume.toFixed(2)); // Save with 2 decimal places
+                
+                if (volumeValueSpan) {
+                    volumeValueSpan.textContent = `${Math.round(volume * 100)}%`;
                 }
             }
 
             /**
-             * Displays the reset confirmation modal.
+             * Sets the currently selected click sound option and updates UI/localStorage.
+             * @param {string} soundName - The name of the sound ('sound1', 'sound2', or 'sound3').
              */
-            function showResetModal() {
-                if (resetConfirmModal) {
-                    resetConfirmModal.classList.add('show');
+            function setSelectedClickSound(soundName) {
+                currentClickSound = soundName;
+                saveToLocalStorage(LOCAL_STORAGE_CLICK_SOUND_KEY, soundName);
+
+                // Update radio button UI - ensure the correct ID is used (e.g., 'sound1Option')
+                const selectedRadio = document.getElementById(`${soundName}Option`);
+                if (selectedRadio) {
+                    selectedRadio.checked = true;
                 }
             }
 
             /**
-             * Hides the reset confirmation modal.
+             * Displays a modal overlay.
+             * @param {HTMLElement} modalElement - The modal element to display.
              */
-            function hideResetModal() {
-                if (resetConfirmModal) {
-                    resetConfirmModal.classList.remove('show');
+            function showModal(modalElement) {
+                if (modalElement) {
+                    modalElement.classList.add('show');
                 }
             }
+
+            /**
+             * Hides a modal overlay.
+             * @param {HTMLElement} modalElement - The modal element to hide.
+             */
+            function hideModal(modalElement) {
+                if (modalElement) {
+                    modalElement.classList.remove('show');
+                }
+            }
+
+            /**
+             * Toggles the visibility of a collapsible section.
+             * Closes other sections when one is opened.
+             * @param {HTMLElement} header - The header element of the section.
+             */
+            function toggleCollapsibleSection(header) {
+                const content = header.nextElementSibling; // Get the content div following the header
+                const isActive = header.classList.contains('active');
+
+                // Close all other collapsible sections
+                collapsibleHeaders.forEach(h => {
+                    if (h !== header && h.classList.contains('active')) {
+                        h.classList.remove('active');
+                        // For collapsing, set max-height to scrollHeight first for smooth transition back to 0
+                        h.nextElementSibling.style.maxHeight = h.nextElementSibling.scrollHeight + 'px';
+                        // Use a tiny timeout to ensure reflow, then set to 0
+                        setTimeout(() => {
+                            h.nextElementSibling.style.maxHeight = '0';
+                            h.nextElementSibling.classList.remove('show');
+                        }, 10); // Small delay
+                    }
+                });
+
+                // Toggle the clicked section
+                if (content) {
+                    if (isActive) {
+                        header.classList.remove('active');
+                        // Start collapsing by setting to current scrollHeight, then to 0
+                        content.style.maxHeight = content.scrollHeight + 'px'; // Set to actual height
+                        setTimeout(() => {
+                            content.style.maxHeight = '0'; // Transition to 0
+                            content.classList.remove('show');
+                        }, 10); // Small delay to allow reflow
+                    } else {
+                        header.classList.add('active');
+                        content.classList.add('show');
+                        // Dynamically set max-height to content's scrollHeight for smooth expansion
+                        content.style.maxHeight = content.scrollHeight + 'px';
+                        // After transition, remove max-height to allow content to naturally adjust if resized
+                        content.addEventListener('transitionend', function handler() {
+                            if (content.classList.contains('show')) {
+                                content.style.maxHeight = 'none'; // Allow content to take natural height
+                            }
+                            content.removeEventListener('transitionend', handler);
+                        });
+                    }
+                }
+            }
+
 
             // --- Event Handlers ---
             function handleButtonClick() {
                 updateClickCount(count + 1);
                 animateClickCount();
-                playSoundEffect(); // Call the sound function on every click
+                playSoundEffect();
             }
 
             function handleResetRequest() {
-                showResetModal();
+                showModal(resetConfirmModal);
             }
 
             function handleResetConfirm() {
                 updateClickCount(0);
-                hideResetModal();
+                hideModal(resetConfirmModal);
             }
 
             function handleResetCancel() {
-                hideResetModal();
+                hideModal(resetConfirmModal);
             }
 
-            function handleThemeToggle() {
-                if (body) {
-                    const isDarkModeNow = body.classList.toggle('dark-mode');
-                    setTheme(isDarkModeNow);
+            function handleSettingsRequest() {
+                showModal(settingsModal);
+                // Ensure slider value and percentage are synced when modal opens
+                const anySoundElement = soundMap.get('sound1')?.element; // Use any initialized sound for volume
+                if (volumeSlider && anySoundElement) {
+                    volumeSlider.value = anySoundElement.volume;
+                    volumeValueSpan.textContent = `${Math.round(anySoundElement.volume * 100)}%`;
+                }
+                updateActiveThemeButton(); // Highlight the current theme button
+                setSelectedClickSound(currentClickSound); // Ensure correct click sound option is checked
+
+                // Close any open collapsible sections when modal is opened
+                collapsibleHeaders.forEach(header => {
+                    header.classList.remove('active');
+                    // Immediately set max-height to 0 for a clean reset
+                    if (header.nextElementSibling) {
+                        header.nextElementSibling.style.maxHeight = '0';
+                        header.nextElementSibling.classList.remove('show');
+                    }
+                });
+            }
+
+            function handleSettingsClose() {
+                hideModal(settingsModal);
+            }
+
+            function handleVolumeChange(event) {
+                const newVolume = parseFloat(event.target.value);
+                setSoundVolume(newVolume);
+            }
+
+            function handleThemeSelection(event) {
+                const selectedTheme = event.target.dataset.theme;
+                if (selectedTheme) {
+                    setTheme(selectedTheme);
+                }
+            }
+
+            function handleCollapsibleHeaderClick(event) {
+                toggleCollapsibleSection(event.currentTarget);
+            }
+
+            function handleSoundOptionChange(event) {
+                if (event.target.name === 'clickSound' && event.target.type === 'radio') {
+                    setSelectedClickSound(event.target.value);
                 }
             }
 
@@ -752,17 +1386,28 @@
                 }
 
                 // 2. Load initial theme preference
-                const savedTheme = getFromLocalStorage(LOCAL_STORAGE_THEME_KEY, 'light');
-                setTheme(savedTheme === 'dark');
+                const savedTheme = getFromLocalStorage(LOCAL_STORAGE_THEME_KEY, DEFAULT_THEME);
+                setTheme(savedTheme); // Apply the loaded theme
 
-                // 3. Add loaded class for container animation
+                // 3. Load and set sound volume
+                const savedVolume = parseFloat(getFromLocalStorage(LOCAL_STORAGE_VOLUME_KEY, DEFAULT_SOUND_VOLUME));
+                if (volumeSlider) {
+                    volumeSlider.value = savedVolume;
+                    setSoundVolume(savedVolume); // Set the actual audio elements volume
+                }
+
+                // 4. Load initial click sound preference
+                const savedClickSound = getFromLocalStorage(LOCAL_STORAGE_CLICK_SOUND_KEY, DEFAULT_CLICK_SOUND);
+                setSelectedClickSound(savedClickSound); // Set the active click sound and update UI
+
+
+                // 5. Add loaded class for container animation
                 if (container) {
                     container.classList.add('loaded');
                 }
 
-                // 4. Attach Event Listeners
+                // 6. Attach Event Listeners
                 if (clickButton) {
-                    // Apply debounce to the click event listener to prevent rapid counting
                     const debouncedHandleButtonClick = debounce(handleButtonClick, DEBOUNCE_DELAY_MS);
                     clickButton.addEventListener('click', debouncedHandleButtonClick);
                 } else {
@@ -775,10 +1420,11 @@
                     console.warn("Warning: Reset button with ID 'resetButton' not found.");
                 }
 
-                if (themeToggleButton) {
-                    themeToggleButton.addEventListener('click', handleThemeToggle);
+                // Settings button listener
+                if (settingsButton) {
+                    settingsButton.addEventListener('click', handleSettingsRequest);
                 } else {
-                    console.warn("Warning: Theme toggle button with ID 'themeToggle' not found.");
+                    console.warn("Warning: Settings button with ID 'settingsButton' not found.");
                 }
 
                 if (confirmYesButton) {
@@ -792,9 +1438,33 @@
                 } else {
                     console.warn("Warning: Modal cancel button with ID 'confirmNo' not found.");
                 }
+
+                // Settings modal listeners
+                if (settingsCloseButton) {
+                    settingsCloseButton.addEventListener('click', handleSettingsClose);
+                }
+
+                if (volumeSlider) {
+                    volumeSlider.addEventListener('input', handleVolumeChange); // 'input' fires continuously
+                }
+
+                if (themeOptionsContainer) {
+                    themeOptionsContainer.addEventListener('click', handleThemeSelection);
+                }
+
+                // Add listeners for new collapsible headers
+                collapsibleHeaders.forEach(header => {
+                    header.addEventListener('click', handleCollapsibleHeaderClick);
+                });
+
+                // Add listener for click sound options
+                if (clickSoundOptionsGroup) {
+                    clickSoundOptionsGroup.addEventListener('change', handleSoundOptionChange);
+                } else {
+                    console.warn("Warning: Click sound options group not found.");
+                }
             }
 
-            // Ensure the DOM is fully loaded before trying to access elements and initialize
             document.addEventListener('DOMContentLoaded', initializeApp);
 
         })(); // End of IIFE
